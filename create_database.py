@@ -1,5 +1,9 @@
 import pymongo, json, os
 
+#This file creates the database on the specified port
+#This file must be run first to populate and create the database
+#This file is only for Phase 1
+#
 def phase1():
     currentDirec = os.getcwd()
 
