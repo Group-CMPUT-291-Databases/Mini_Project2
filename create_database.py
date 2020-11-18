@@ -1,6 +1,6 @@
 import pymongo, json, os
 
-def main():
+def phase1():
     currentDirec = os.getcwd()
 
     postPath = currentDirec + "/Posts.json"
@@ -28,6 +28,7 @@ def main():
     db = client["291db"]
 
     collist = db.list_collection_names()
+    print(collist)
     Posts = db["Posts"]
     Tags = db["Tags"]
     Votes = db["Votes"]
@@ -38,5 +39,13 @@ def main():
     if "Tags" in collist:
         Tags.delete_many({})
 
+    #print(posts['posts']['row'][1])
+    Posts.insert_many(posts['posts']['row'])
+    Tags.insert_many(tags['tags']['row'])
+    Votes.insert_many(votes['votes']['row'])
+
+def main():
+    phase1()
+    
 if __name__ == "__main__":
     main()
