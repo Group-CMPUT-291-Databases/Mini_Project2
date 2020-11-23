@@ -49,25 +49,39 @@ def phase1():
     for d in posts['posts']['row']:
         d['terms'] = []
         for word in d['Body'].split():
-            if len(word) >= 3:
+            word = removePunc(word)
+            if word in d['terms']:
+                continue
+            elif len(word) >= 3:
                 d['terms'].append(word)
         if "Title" in d.keys():
             for word in d["Title"].split():
+                word = removePunc(word)
                 if word in d['terms']:
-                    print(word)
                     continue
                 elif len(word) >= 3:
                     d['terms'].append(word)
         if "Tags" in d.keys():
             for word in d["Tags"].split('><'):
-                temp = word.replace('<','')
-                temp = temp.replace('>','')
-                d['terms'].append(temp)
+                temp = removePunc(word)
+                if temp in d['terms']:
+                    continue
+                elif len(temp) >= 3:
+                    d['terms'].append(temp)
     print(posts['posts']['row'][0])
     Posts.insert_many(posts['posts']['row'])
     Tags.insert_many(tags['tags']['row'])
     Votes.insert_many(votes['votes']['row'])
 
+def removePunc(word):
+    newWord = word.replace('<p>','')
+    newWord = newWord.replace('</p>','')
+    newWord = newWord.replace('<','')
+    newWord = newWord.replace('>','')
+    newWord = newWord.replace('?','')
+    newWord = newWord.replace('.','')
+    newWord = newWord.replace('!','')
+    return newWord
 def main():
     phase1()
     
