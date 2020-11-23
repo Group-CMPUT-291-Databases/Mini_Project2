@@ -32,7 +32,7 @@ def phase1():
     db = client["291db"]
 
     collist = db.list_collection_names()
-    print(collist)
+    print("Post connection successful")
     Posts = db["Posts"]
     Tags = db["Tags"]
     Votes = db["Votes"]
@@ -43,7 +43,27 @@ def phase1():
     if "Tags" in collist:
         Tags.delete_many({})
 
-    #print(posts['posts']['row'][1])
+    #print(type(posts['posts']['row'][0]))
+    #Fix terms having <p> or </p>
+    #Remove punctuations
+    for d in posts['posts']['row']:
+        d['terms'] = []
+        for word in d['Body'].split():
+            if len(word) >= 3:
+                d['terms'].append(word)
+        if "Title" in d.keys():
+            for word in d["Title"].split():
+                if word in d['terms']:
+                    print(word)
+                    continue
+                elif len(word) >= 3:
+                    d['terms'].append(word)
+        if "Tags" in d.keys():
+            for word in d["Tags"].split('><'):
+                temp = word.replace('<','')
+                temp = temp.replace('>','')
+                d['terms'].append(temp)
+    print(posts['posts']['row'][0])
     Posts.insert_many(posts['posts']['row'])
     Tags.insert_many(tags['tags']['row'])
     Votes.insert_many(votes['votes']['row'])
