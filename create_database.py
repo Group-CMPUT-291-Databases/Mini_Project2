@@ -1,9 +1,10 @@
-import pymongo, json, os
+import pymongo, json, os, time
 
 #This file creates the database on the specified port
 #This file must be run first to populate and create the database
 #This file is only for Phase 1
 #
+start_time = None
 def phase1():
     currentDirec = os.getcwd()
 
@@ -52,26 +53,27 @@ def phase1():
             word = removePunc(word)
             if word in d['terms']:
                 continue
-            elif len(word) >= 3:
-                d['terms'].append(word)
+            if len(word) >= 3:
+                d['terms'].append(word.lower())
         if "Title" in d.keys():
             for word in d["Title"].split():
                 word = removePunc(word)
                 if word in d['terms']:
                     continue
-                elif len(word) >= 3:
-                    d['terms'].append(word)
+                if len(word) >= 3:
+                    d['terms'].append(word.lower())
         if "Tags" in d.keys():
             for word in d["Tags"].split('><'):
                 temp = removePunc(word)
                 if temp in d['terms']:
                     continue
-                elif len(temp) >= 3:
-                    d['terms'].append(temp)
-    print(posts['posts']['row'][0])
+                if len(temp) >= 3:
+                    d['terms'].append(temp.lower())               
     Posts.insert_many(posts['posts']['row'])
     Tags.insert_many(tags['tags']['row'])
     Votes.insert_many(votes['votes']['row'])
+
+    Posts.create_index([('terms', 1)])
 
 def removePunc(word):
     newWord = word.replace('<p>','')
@@ -83,7 +85,9 @@ def removePunc(word):
     newWord = newWord.replace('!','')
     return newWord
 def main():
+    start_time = time.time()
     phase1()
+    print(time.time()-start_time)
     
 if __name__ == "__main__":
     main()
