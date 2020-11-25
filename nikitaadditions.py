@@ -13,7 +13,7 @@ from datetime import date
 
 # List collection names.
 user_id= ""
-cursor_id = collist.find().sort( { "Id": -1 }).limit(1)
+cursor_id = collist.find().sort( "Id", -1 ).limit(1)
 
 for post in cursor_id:
     current_id = post["Id"]

@@ -1,5 +1,9 @@
 import pymongo, os
 from datetime import date
+from pymongo import MongoClient
+
+currentUser = ''
+cursor_id = None
 
 #Phase 2 portions should be put into here
 def main():
@@ -18,18 +22,26 @@ def main():
 
     collist = db.list_collection_names()
     print(collist)
+    Posts = db['Posts']
+    Tags = db['Tags']
+    Votes = db['Votes']
+    #cursor Id
+    #Probably not meant to be ID
+    cursor_id = Posts.find().sort( "Id", -1 ).limit(1)
+    for post in cursor_id:
+        current_id = post["Id"]
+        print(current_id)
     #User ID get here
     #ID is optional
-    currentUser = None
     u = input("Enter user ID or type skip: ")
     if u.lower() == "skip":
-        currentUser = None
+        currentUser = ''
     else:
         currentUser = u
     
-    if currentUser != None:
-        posts = db["Posts"]
-        returns = posts.find({"OwnerUserId":currentUser})
+    if currentUser != '':
+        print(currentUser)
+        returns = Posts.find({"OwnerUserId":currentUser})
         avgScore = 0
         count = 0
         for post in returns:
