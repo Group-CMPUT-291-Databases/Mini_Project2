@@ -50,7 +50,6 @@ def search_for_questions():
                     #{"Id": search_result_array[input_post-1]["Id"]}
                     Posts.update_one({"Id":search_result_array[input_post-1]["Id"]}, {"$inc":{"ViewCount": 1}})
                     correct_input = True
-                    print(search_result_array[input_post-1]["Id"])
                     action_answer_input= input("Do you want to answer this question? [y for yes and anything else for no] ")
                     if action_answer_input == "y":
                         question_action_answer(search_result_array[input_post-1]["Id"])
@@ -176,15 +175,18 @@ def list_answers(db,search_postID):
     correct_input = False
     
     while correct_input == False:
-        input_answer = int(input_answer)
-        
-        if input_answer >= 0 and input_answer <= len(answers_to_print)+1:
-            print(answers_to_print[input_answer])
-            correct_input = True
-            add_vote(postID,answerID,db,scoreNum)
+        if input_answer.isnumeric():
+            input_answer = int(input_answer)
+            if input_answer >= 0 and input_answer <= len(answers_to_print)+1:
+                print(answers_to_print[input_answer])
+                correct_input = True
+                add_vote(postID,answerID,db,scoreNum)
 
+            else:
+                print("Post does not exist, try again")
+                input_answer = input("Input the Result Number to select the post: ")
         else:
-            print("Post does not exist, try again")
+            print("Not a valid selection")
             input_answer = input("Input the Result Number to select the post: ")
             
 def add_vote(postID,answerID, db,scoreNum):
@@ -299,6 +301,8 @@ def main():
         fullPort = "mongodb://localhost:" + str(port)
         if len(str(port)) != 5:
             print("Not a valid port number")
+        elif not str(port).isnumeric():
+            print("Not a valid port number")
         else:
             found = True
 
@@ -311,7 +315,6 @@ def main():
     Tags = db['Tags']
     Votes = db['Votes']
     #cursor Id
-    #cursor_id = Posts.find().sort( "Id", -1 ).limit(1)
     cursor_id = Posts.find_one({"$query":{},"$orderby":{"_id":-1}})
     current_id = cursor_id["Id"]
     #User ID get here
