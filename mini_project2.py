@@ -44,20 +44,22 @@ def search_for_questions():
 
             input_post = input("Input the Result Number to select the post: ")
 
-            input_post = int(input_post)
-            
-            if (input_post > 0 and input_post <= len(search_result_array)+1) and isnumberic(input_post):
-                #{"Id": search_result_array[input_post-1]["Id"]}
-                Posts.update_one({"Viewcount":""}, {"$inc":{"ViewCount": 1}})
-                correct_input = True
-                action_answer_input= input("Do you want to answer this question? [y for yes and anything else for no] ")
-                if action_answer_input == "y":
-                    question_action_answer(search_result_array[input_post-1]["Id"])
+            if input_post.isnumeric():
+                input_post = int(input_post)
+                if (input_post > 0 and input_post <= len(search_result_array)):
+                    #{"Id": search_result_array[input_post-1]["Id"]}
+                    Posts.update_one({"Viewcount":""}, {"$inc":{"ViewCount": 1}})
+                    correct_input = True
+                    action_answer_input= input("Do you want to answer this question? [y for yes and anything else for no] ")
+                    if action_answer_input == "y":
+                        question_action_answer(search_result_array[input_post-1]["Id"])
 
-                return search_result_array[input_post-1]["Id"]
+                    return search_result_array[input_post-1]["Id"]
         
+                else:
+                    print("Post does not exist, try again")
             else:
-                print("Post does not exist, try again")
+                print("Not a valid post selection")
 
 
 
