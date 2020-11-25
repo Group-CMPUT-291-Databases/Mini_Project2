@@ -128,11 +128,14 @@ def list_answers(db,search_postID):
     #Print all answers related to the question
     answers_table = db["Posts"]
     test_post = answers_table.find({"Id": search_postID})
-    
+    accepted_id = None
     for postid in test_post:
         postID = postid["Id"]
-        accepted_id = postid["AcceptedAnswerId"]
         scoreNum = postid["Score"]
+        if "AcceptedAnswerID" in postid.keys():
+            accepted_id = postid["AcceptedAnswerId"]
+        else:
+            accepted_id = None
     primary_list = answers_table.find({"ParentId": postID})
     answers_to_print = []
     
@@ -268,7 +271,7 @@ def add_vote(postID,answerID, db,scoreNum):
                     last_vote_id = str(int(last_vote_id)+1)
                     
                     votes_table.insert_one(question_vote)
-                    ("Vote has been added")
+                    print("Vote has been added")
                     
                 add_vote_loop = True                
                 
