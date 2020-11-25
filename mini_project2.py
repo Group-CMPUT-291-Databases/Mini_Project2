@@ -42,27 +42,28 @@ def search_for_questions():
     correct_input = False
 
     while correct_input == False:
-        try:
-            input_post = int(input_post)
-            
-            if input_post > 0 and input_post <= len(search_result_array)+1:
-                #{"Id": search_result_array[input_post-1]["Id"]}
-                Posts.update_one({"Viewcount":""}, {"$inc":{"ViewCount": 1}})
-                correct_input = True
-                action_answer_input= input("Do you want to answer this question? [y for yes and anything else for no] ")
-                if action_answer_input == "y":
-                    question_action_answer(search_result_array[input_post-1]["Id"])
-
-                return search_result_array[input_post-1]["Id"]
         
-            else:
-                print("Post does not exist, try again")
-                input_post = input("Input the Result Number to select the post: ")
+        input_post = int(input_post)
+            
+        if input_post > 0 and input_post <= len(search_result_array)+1:
+            #{"Id": search_result_array[input_post-1]["Id"]}
+            Posts.update_one({"Viewcount":""}, {"$inc":{"ViewCount": 1}})
+            correct_input = True
+            action_answer_input= input("Do you want to answer this question? [y for yes and anything else for no] ")
+            print(action_answer_input)
+            if action_answer_input == "y":
+                question_action_answer(search_result_array[input_post-1]["Id"])
 
-
-        except: 
-            print("Wrong Input")
+            return search_result_array[input_post-1]["Id"]
+        
+        else:
+            print("Post does not exist, try again")
             input_post = input("Input the Result Number to select the post: ")
+
+
+         
+        print("Wrong Input")
+        input_post = input("Input the Result Number to select the post: ")
 
 def post_a_question():
     global Posts, Tags, Votes, current_id, currentUser
@@ -76,7 +77,7 @@ def post_a_question():
     new_post = { 
     "Id": str(int(current_id)+1),
     "PostTypeId": "1",
-    "CreationDate": date.today(),
+    "CreationDate": str(date.today()),
     "Score": 0,
     "ViewCount": 0,
     "Body": input_body_text,
@@ -90,7 +91,7 @@ def post_a_question():
     }
     current_id = str(int(current_id)+1)
 
-    Post.insert_one(new_post)
+    Posts.insert_one(new_post)
 
 def question_action_answer(question_id):
     global Posts, Tags, Votes, current_id, currentUser
@@ -104,7 +105,7 @@ def question_action_answer(question_id):
     "Id": str(int(current_id)+1),
     "PostTypeId": "2",
     "ParentId": question_id,
-    "CreationDate": date.today(),
+    "CreationDate": str(date.today()),
     "Score": 0,
     "ViewCount": 0,
     "Body": input_body_text,
@@ -117,7 +118,7 @@ def question_action_answer(question_id):
 
     current_id = str(int(current_id)+1)
 
-    collist.insert_one(new_post)
+    Posts.insert_one(new_post)
 
 
 def list_answers(db,search_postID):
@@ -300,7 +301,6 @@ def main():
     db = client["291db"]
 
     collist = db.list_collection_names()
-    print(collist)
     Posts = db['Posts']
     Tags = db['Tags']
     Votes = db['Votes']
@@ -308,7 +308,6 @@ def main():
     #cursor_id = Posts.find().sort( "Id", -1 ).limit(1)
     cursor_id = Posts.find_one({"$query":{},"$orderby":{"_id":-1}})
     current_id = cursor_id["Id"]
-    print(current_id)
     #User ID get here
     #ID is optional
     u = input("Enter user ID or type skip: ")
