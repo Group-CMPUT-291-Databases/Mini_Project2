@@ -229,7 +229,8 @@ def add_vote(postID,answerID, db,scoreNum):
                         }
                     last_vote_id = str(int(last_vote_id)+1)
                     
-                    votes_table.insert_one(question_vote)  
+                    votes_table.insert_one(question_vote) 
+                    Posts.update_one({"Id": postID}, {"$inc":{"Score": 1}})
                     print("Vote has been added ")
                 elif vote_type == 'answer':
                     question_vote = { 
@@ -242,6 +243,7 @@ def add_vote(postID,answerID, db,scoreNum):
                     last_vote_id = str(int(last_vote_id)+1)
                     
                     votes_table.insert_one(question_vote)   
+                    Posts.update_one({"Id": answerID}, {"$inc":{"Score": 1}})
                     print("Vote has been added")
                     
                 add_vote_loop = True
@@ -259,6 +261,7 @@ def add_vote(postID,answerID, db,scoreNum):
                     last_vote_id = str(int(last_vote_id)+1)
                     
                     votes_table.insert_one(question_vote)
+                    Posts.update_one({"Id": postID}, {"$inc":{"Score": 1}})
                     print("Vote has been added")
            
                 elif vote_type == 'answer':
@@ -273,6 +276,7 @@ def add_vote(postID,answerID, db,scoreNum):
                     last_vote_id = str(int(last_vote_id)+1)
                     
                     votes_table.insert_one(question_vote)
+                    Posts.update_one({"Id": answerID}, {"$inc":{"Score": 1}})
                     print("Vote has been added")
                     
                 add_vote_loop = True                
