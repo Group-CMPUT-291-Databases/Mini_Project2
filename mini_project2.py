@@ -92,7 +92,7 @@ def post_a_question():
 
     Post.insert_one(new_post)
 
-def question_action_answer(question_id)
+def question_action_answer(question_id):
     global Posts, Tags, Votes, current_id, currentUser
     
     input_body_text = input("Body text:")
@@ -103,7 +103,7 @@ def question_action_answer(question_id)
     new_post = { 
     "Id": str(int(current_id)+1),
     "PostTypeId": "2",
-    "ParentId": question_id
+    "ParentId": question_id,
     "CreationDate": date.today(),
     "Score": 0,
     "ViewCount": 0,
