@@ -48,11 +48,15 @@ def search_for_questions():
                 input_post = int(input_post)
                 if (input_post > 0 and input_post <= len(search_result_array)):
                     #{"Id": search_result_array[input_post-1]["Id"]}
-                    Posts.update_one({"Viewcount":""}, {"$inc":{"ViewCount": 1}})
+                    Posts.update_one({"Id":search_result_array[input_post-1]["Id"]}, {"$inc":{"ViewCount": 1}})
                     correct_input = True
+                    print(search_result_array[input_post-1]["Id"])
                     action_answer_input= input("Do you want to answer this question? [y for yes and anything else for no] ")
                     if action_answer_input == "y":
                         question_action_answer(search_result_array[input_post-1]["Id"])
+                        print("Answer Posted")
+                        #Increases answer count
+                        Posts.update_one({"Id":search_result_array[input_post-1]["Id"]}, {"$inc":{"AnswerCount": 1}})
 
                     return search_result_array[input_post-1]["Id"]
         
