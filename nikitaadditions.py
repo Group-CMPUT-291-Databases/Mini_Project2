@@ -26,7 +26,7 @@ def search_for_questions():
     search_result_array = []
 
     for keyword in keyword_list:
-        results = collist.find({$or:[
+        results = collist.find({"$or":[
             {"PostTypeId": "1","Body": keyword },
             {"PostTypeId":"1", "Title": keyword},
             {"PostTypeId":"1", "Tags": keyword}
@@ -46,12 +46,12 @@ def search_for_questions():
     input_post = input("Input the Result Number to select the post: ")
     correct_input = False
 
-    while correct_input = False:
+    while correct_input == False:
         try:
             input_post = int(input_post)
             
             if input_post > 0 and input_post <= len(search_result_array)+1:
-                collist.update_one{"ViewCount": , "$inc":"ViewCount": 1}
+                collist.update_one({"ViewCount": , "$inc":"ViewCount": 1})
                 correct_input = True
                 action_answer_input= input("Do you want to answer this question? [y for yes and anything else for no]")
                 if action_answer_input == "y":
