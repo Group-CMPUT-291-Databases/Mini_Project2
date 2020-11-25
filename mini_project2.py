@@ -289,7 +289,7 @@ def main():
     found = False
     while found != True:
         port = input("Input port used for connection: ")
-        fullPort = "mongodb://localhost:" + port
+        fullPort = "mongodb://localhost:" + str(port)
         if len(port) != 5:
             print("Not a valid port number")
         else:
