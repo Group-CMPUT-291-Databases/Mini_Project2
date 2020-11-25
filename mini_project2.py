@@ -348,12 +348,12 @@ def main():
             print("Average Answer Score: ",(aAvgScore/acount))
         print("Number of votes casted: ",vcount)
     loop = True
-    question = None
+    questions = None
     while loop != False:
         print("\n","Main Selection Menu")
         print("Type 'search question' to search for a question")
         print("Type 'post question' to post a question")
-        if question != None:
+        if questions != None:
             print("Type 'list answers' to list all answers")
         print("Type 'quit' to exit program")
         menu = input()
@@ -361,7 +361,7 @@ def main():
             questions = search_for_questions()
         elif menu.lower() == "post question":
             post_a_question()
-        elif menu.lower() == "list answers":
+        elif menu.lower() == "list answers" and questions != None:
             list_answers(db,questions)
         elif menu.lower() == 'quit':
             sys.exit()
